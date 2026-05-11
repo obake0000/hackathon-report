@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ハッカソン3大会レポート v2</title>
+<style>
+:root {
+  --bg: #fafaf7;
+  --card: #ffffff;
+  --ink: #333;
+  --gray: #666;
+  --line: #e3e0d8;
+  --title: #1F4E79;
+  --h2: #2E74B5;
+  --apply: #8B0000;
+  --warn-bg: #FFF4E5;
+  --warn-line: #E69138;
+  --issue-bg: #FDECEA;
+  --issue-line: #C0392B;
+  --do-bg: #E8F1FB;
+  --do-line: #2E74B5;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Meiryo", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.75;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 36px 28px 80px; }
+
+/* ===== 表紙 ===== */
+.cover {
+  text-align: center;
+  padding: 60px 0 50px;
+  border-bottom: 3px solid var(--title);
+  margin-bottom: 36px;
+}
+.cover .kicker { color: var(--gray); font-size: 12px; letter-spacing: 0.2em; }
+.cover h1 {
+  font-family: "Yu Mincho", serif;
+  font-size: 30px;
+  color: var(--title);
+  margin: 14px 0 8px;
+}
+.cover .sub { color: var(--gray); font-size: 15px; }
+.cover .tag {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 4px 14px;
+  background: var(--title);
+  color: white;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* ===== 目次 ===== */
+.toc {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 22px 26px;
+  margin-bottom: 40px;
+}
+.toc h2 {
+  font-family: "Yu Mincho", serif;
+  font-size: 16px;
+  color: var(--title);
+  margin: 0 0 12px;
+  letter-spacing: 0.05em;
+}
+.toc ol { margin: 0; padding: 0; list-style: none; counter-reset: chap; }
+.toc li {
+  counter-increment: chap;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--line);
+}
+.toc li:last-child { border: none; }
+.toc li::before {
+  content: counter(chap, decimal-leading-zero);
+  display: inline-block;
+  width: 38px;
+  color: var(--h2);
+  font-weight: bold;
+}
+.toc .t { font-weight: bold; color: var(--title); }
+.toc .s { color: var(--gray); font-size: 13px; display: block; margin-left: 38px; margin-top: 2px; }
+
+/* ===== セクション見出し ===== */
+section { margin-bottom: 48px; }
+section h2.h1 {
+  font-family: "Yu Mincho", serif;
+  font-size: 22px;
+  color: var(--title);
+  border-left: 8px solid var(--title);
+  padding: 4px 0 4px 14px;
+  margin-bottom: 18px;
+}
+section h3.h2 {
+  font-size: 16px;
+  color: var(--h2);
+  margin: 24px 0 10px;
+  padding-left: 12px;
+  border-left: 4px solid var(--h2);
+}
+
+p { margin: 8px 0; font-size: 14px; }
+
+/* ===== 結論カード（1図+1文+例え話） ===== */
+.conclusion {
+  margin-bottom: 40px;
+}
+.conclusion-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin-bottom: 18px;
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 22px;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.conclusion-card .figure {
+  text-align: center;
+}
+.conclusion-card .one-line {
+  font-family: "Yu Mincho", serif;
+  font-size: 19px;
+  font-weight: bold;
+  color: var(--title);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.conclusion-card .example {
+  color: var(--apply);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.conclusion-card .example::before {
+  content: "→ 例えば：";
+  font-weight: bold;
+}
+.conclusion-label {
+  display: inline-block;
+  background: var(--title);
+  color: white;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 3px 10px;
+  margin-bottom: 12px;
+}
+
+/* ===== 課題マップ（赤枠） ===== */
+.issue-map {
+  background: var(--issue-bg);
+  border: 2px solid var(--issue-line);
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin: 16px 0 26px;
+}
+.issue-map .head {
+  color: var(--issue-line);
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.issue-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.issue-box {
+  background: white;
+  border: 1px solid var(--issue-line);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  position: relative;
+}
+.issue-box .num {
+  color: var(--issue-line);
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.issue-box .title { font-weight: bold; margin: 2px 0 4px; }
+.issue-box .voice { color: var(--gray); font-size: 12px; }
+
+/* ===== 行動フロー（青箱） ===== */
+.action-flow {
+  background: var(--do-bg);
+  border: 2px solid var(--do-line);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.action-flow .step {
+  background: white;
+  border: 1px solid var(--do-line);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--do-line);
+  text-align: center;
+  min-width: 110px;
+}
+.action-flow .arrow { color: var(--do-line); font-size: 16px; }
+
+/* ===== 行動章 ===== */
+.action-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--do-line);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-bottom: 18px;
+}
+.action-section h3 {
+  color: var(--do-line);
+  font-size: 17px;
+  margin: 0 0 10px;
+}
+.action-section .lead { font-size: 14px; margin-bottom: 8px; }
+.action-section .apply {
+  color: var(--apply);
+  font-size: 13px;
+  background: #FCEAEA;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.action-section .apply::before {
+  content: "→ 例えば：";
+  font-weight: bold;
+}
+
+/* ===== 大会比較ミニカード ===== */
+.compare-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0 22px;
+}
+.compare-3 .c {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+}
+.compare-3 .c.good { border-top: 4px solid #2E8B57; }
+.compare-3 .c.mid  { border-top: 4px solid #E69138; }
+.compare-3 .c.bad  { border-top: 4px solid #999; }
+.compare-3 .face { margin: 4px 0 6px; }
+.compare-3 .name { font-weight: bold; font-size: 13px; }
+.compare-3 .verdict { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+/* ===== 過去入賞ミニ一覧 ===== */
+.past-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+.past-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.past-item .badge {
+  display: inline-block;
+  background: #B58A2A;
+  color: white;
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+.past-item .badge.s { background: #999; }
+.past-item .badge.r { background: var(--h2); }
+.past-item .name { font-weight: bold; }
+.past-item .team { color: var(--gray); font-size: 11px; }
+.past-item .why { color: #444; font-size: 12px; margin-top: 4px; }
+
+/* ===== 時計バー（タイムライン） ===== */
+.timeline-bar {
+  display: flex;
+  margin: 12px 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+}
+.timeline-bar div { padding: 8px 6px; text-align: center; }
+.tb-1 { background: #2E74B5; flex: 5; }
+.tb-2 { background: #5A8A3A; flex: 9; }
+.tb-3 { background: #B58A2A; flex: 3; }
+.tb-4 { background: #C0392B; flex: 3; }
+
+/* ===== 出典 ===== */
+.sources {
+  font-size: 11px;
+  color: var(--gray);
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+  padding-top: 14px;
+}
+.sources a { color: var(--gray); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===== 表紙 ===== -->
+<header class="cover">
+  <div class="kicker">HACKATHON REPORT v2</div>
+  <h1>ハッカソン3大会、ぼくならどう戦うか</h1>
+  <div class="sub">CyberAgent Web Speed ／ 全日本AI ／ Impact Tokyo</div>
+  <div class="tag">2026-05-12 版</div>
+</header>
+
+<!-- ===== 1. 結論（1図+1文+例え話） ===== -->
+<section class="conclusion">
+<span class="conclusion-label">CONCLUSION</span>
+
+<div class="conclusion-card">
+  <div class="figure">
+    <svg width="92" height="92" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="44" fill="#FFD966" stroke="#B58A2A" stroke-width="3"/>
+      <circle cx="35" cy="42" r="4" fill="#333"/>
+      <circle cx="65" cy="42" r="4" fill="#333"/>
+      <path d="M 30 62 Q 50 80 70 62" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div style="font-size:11px;color:#666;margin-top:4px;">いつもの作業</div>
+  </div>
+  <div>
+    <div class="one-line">全日本AIハッカソンに絞ろう。</div>
+    <p style="font-size:13px;color:#555;margin:6px 0;">毎日Claudeで自動化している人にとって、3時間バトルは新しい挑戦ではなく、いつもやってる作業そのもの。</p>
+    <div class="example">毎日ComfyUIで画像を量産してる人なら、3時間で動くデモを作るのは「今週のいつもの仕事」を90分前倒すだけ。</div>
+  </div>
+</div>
+
+<div class="conclusion-card">
+  <div class="figure">
+    <svg width="92" height="92" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="38" fill="#A4C8E1" stroke="#2E74B5" stroke-width="2"/>
+      <text x="50" y="48" text-anchor="middle" font-size="13" fill="#1F4E79" font-weight="bold">自分</text>
+      <text x="50" y="62" text-anchor="middle" font-size="10" fill="#1F4E79">95%</text>
+      <circle cx="80" cy="78" r="13" fill="#F4B7B0" stroke="#C0392B" stroke-width="2"/>
+      <text x="80" y="82" text-anchor="middle" font-size="9" fill="#C0392B">英語</text>
+    </svg>
+    <div style="font-size:11px;color:#666;margin-top:4px;">95% 自力で完結</div>
+  </div>
+  <div>
+    <div class="one-line">相棒は「英語か音楽だけ」補えばいい。</div>
+    <p style="font-size:13px;color:#555;margin:6px 0;">画像・3D・ゲーム・デザイン・プレゼン全部自力で出せる。同じスキル持ちを探すのは至難なので、自分が薄い1点（英語ピッチ／音楽）だけ補う相棒にする。</p>
+    <div class="example">普段ComfyUIで広告画像も作れる人なら、ハッカソンで「映像できる人」を探す必要はない。Impactなら英語の上手い知人1人、AI国内なら音作りが得意な人1人、それで装備は完成。</div>
+  </div>
+</div>
+
+<div class="conclusion-card">
+  <div class="figure">
+    <svg width="92" height="92" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="white" stroke="#2E74B5" stroke-width="3"/>
+      <line x1="50" y1="50" x2="50" y2="18" stroke="#C0392B" stroke-width="3" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="76" y2="50" stroke="#1F4E79" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="3" fill="#333"/>
+      <text x="50" y="92" text-anchor="middle" font-size="10" fill="#666">3時間</text>
+    </svg>
+    <div style="font-size:11px;color:#666;margin-top:4px;">勝因は速さ</div>
+  </div>
+  <div>
+    <div class="one-line">「動かす力」が「うまさ」に勝つ。</div>
+    <p style="font-size:13px;color:#555;margin:6px 0;">優勝作は技術がすごいのではなく「動いた・笑えた・拡散できた」。途中で止まったチームは審査外。</p>
+    <div class="example">普段noteを毎日書いて出している人なら、完成度より「最後まで出す」癖がついていて、これだけで上位半分に入る。</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 2. よくある課題 ===== -->
+<section>
+<h2 class="h1">■ よくある課題</h2>
+<p>ハッカソンに出ようと思った人が、最初にぶつかる5つの困りごと。</p>
+
+<div class="issue-map">
+  <div class="head">💢 みんなここで止まる</div>
+  <div class="issue-list">
+    <div class="issue-box">
+      <div class="num">課題 01</div>
+      <div class="title">どの大会に出ればいいか分からない</div>
+      <div class="voice">3つあって、どれが自分に向くか判断できない。</div>
+    </div>
+    <div class="issue-box">
+      <div class="num">課題 02</div>
+      <div class="title">ガチ勢に勝てる気がしない</div>
+      <div class="voice">学生やフロントエンドの専門家が出てくるんでしょ？</div>
+    </div>
+    <div class="issue-box">
+      <div class="num">課題 03</div>
+      <div class="title">2人チームの相棒がいない</div>
+      <div class="voice">誰を連れていけば一番効くか判断できない。</div>
+    </div>
+    <div class="issue-box">
+      <div class="num">課題 04</div>
+      <div class="title">3時間で何を作るか決められない</div>
+      <div class="voice">テーマを受けてから30分迷ったら、もう詰む。</div>
+    </div>
+    <div class="issue-box">
+      <div class="num">課題 05</div>
+      <div class="title">時間内に完成せず未提出になる</div>
+      <div class="voice">作りたいことが膨らんで、見せ場まで届かない。</div>
+    </div>
+  </div>
+</div>
+
+<p>結論として、対策は「戦場を絞る」「相棒を先に決める」「武器を固定する」「テンプレを持っておく」「練習で1回負ける」の5つでほぼ全部解ける。</p>
+</section>
+
+<!-- ===== 3. 取り組む5つの行動 ===== -->
+<section>
+<h2 class="h1">■ 取り組む5つの行動</h2>
+
+<div class="action-flow">
+  <div class="step">①戦場を選ぶ</div>
+  <div class="arrow">▶</div>
+  <div class="step">②相棒を決める</div>
+  <div class="arrow">▶</div>
+  <div class="step">③武器を固定</div>
+  <div class="arrow">▶</div>
+  <div class="step">④雛形を作る</div>
+  <div class="arrow">▶</div>
+  <div class="step">⑤練習で負ける</div>
+</div>
+
+<div class="action-section">
+  <h3>▶ 行動1：戦場を全日本AIに絞る</h3>
+  <p class="lead">3つあるけど、出るのは1つだけ。Web Speedは見送り、Impactは余力があれば、AIは本気。</p>
+  <div class="compare-3">
+    <div class="c good">
+      <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#FFD966"/><circle cx="14" cy="17" r="2" fill="#333"/><circle cx="26" cy="17" r="2" fill="#333"/><path d="M 12 25 Q 20 32 28 25" stroke="#333" stroke-width="2" fill="none"/></svg>
+      <div class="name">全日本AI</div>
+      <div class="verdict">いつもの武器で戦える</div>
+    </div>
+    <div class="c mid">
+      <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#F2A65A"/><circle cx="14" cy="17" r="2" fill="#333"/><circle cx="26" cy="17" r="2" fill="#333"/><path d="M 14 26 L 26 26" stroke="#333" stroke-width="2" fill="none"/></svg>
+      <div class="name">Impact Tokyo</div>
+      <div class="verdict">学びと人脈用</div>
+    </div>
+    <div class="c bad">
+      <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#CCC"/><circle cx="14" cy="17" r="2" fill="#333"/><circle cx="26" cy="17" r="2" fill="#333"/><path d="M 12 28 Q 20 22 28 28" stroke="#333" stroke-width="2" fill="none"/></svg>
+      <div class="name">Web Speed</div>
+      <div class="verdict">フロント職人の世界</div>
+    </div>
+  </div>
+  <div class="apply">Reactでサイトを毎日チューニングしている人ならWeb Speedで戦える。普段Pythonで業務ツールを作る人なら、武器がそろうAIハッカソンの方が勝率は3倍くらい違う。</div>
+</div>
+
+<div class="action-section">
+  <h3>▶ 行動2：相棒は「1点だけ補う人」に絞る</h3>
+  <p class="lead">同じスキル（AI＋画像＋3D＋ゲーム）を持つ人は世の中に少ない。探すのに時間使うより、自分が薄い1点だけ補う人を1日で決める。</p>
+  <p class="lead">候補は2つだけ。①音楽（BGM・効果音・SE）が得意な人。②英語ピッチが得意な人（Impact Tokyo用）。プレゼンは自分でやれるからMC役は不要。</p>
+  <p class="lead">声をかける場所はX、過去のハッカソンconnpass参加者、Comfy・Cursor界隈。1人めで断られたら3人めまで送る。</p>
+  <div class="apply">音楽サークル経験のある知人や、海外在住の知人を1人引っ張れば、3時間で「動くデモ＋オリジナルBGM」or「動くデモ＋英語ピッチ」が揃う。他のスキルは自分で全部回す前提で動く。</div>
+</div>
+
+<div class="action-section">
+  <h3>▶ 行動3：使う道具を固定する</h3>
+  <p class="lead">本番で迷わないため、武器セットを事前に決めておく。Cursorで雛形、Claudeで補強、ComfyUIで絵、Sunoで音、Sora 2で映像。</p>
+  <p class="lead">これ以外の道具は当日使わない。AIに指示してコードを書かせるやり方（バイブコーディング）に慣れるのが一番大事。</p>
+  <div class="apply">毎週ComfyUIで広告画像を作っている人なら、ハッカソンでもキャラ素材10分・背景10分で作れる。新しい道具を試すのは本番後に回す。</div>
+</div>
+
+<div class="action-section">
+  <h3>▶ 行動4：雛形を2つ作っておく</h3>
+  <p class="lead">本番でゼロから作ると間に合わない。「1ファイルで動くゲーム」と「1ファイルで動くクイズ」のHTML＋JS雛形を事前に用意。</p>
+  <p class="lead">テーマ受けたらどちらかにテーマだけ差し替えて即動かす。動かない時間を作らない。</p>
+  <div class="apply">毎日ダッシュボードのHTMLを作っている人なら、ゲーム枠の雛形を1日で用意できる。クイズ枠は3択ロジック＋スコア表示の60行で十分。</div>
+</div>
+
+<div class="action-section">
+  <h3>▶ 行動5：練習エントリーで1回負ける</h3>
+  <p class="lead">いきなり本気で出ない。6/20のオンライン回で1回出て、自分の弱点を洗う。7/25の東京回で本気を出す。</p>
+  <p class="lead">負ける目的は、本番の空気と時間配分を体で覚えること。優勝チームの動き方を観察するのも狙い。</p>
+  <div class="apply">投資ツールのバックテストを毎日やっている人なら「練習で1回流す」感覚は分かる。同じことをハッカソンでもやる。</div>
+</div>
+
+<h3 class="h2">▶ 当日3時間のタイムライン</h3>
+<div class="timeline-bar">
+  <div class="tb-1">0-15分 / コンセプト確定</div>
+  <div class="tb-2">15-110分 / MVP実装</div>
+  <div class="tb-3">110-150分 / 世界観統合</div>
+  <div class="tb-4">150-180分 / 提出</div>
+</div>
+<p style="font-size:13px;color:#555;">最初の15分でコンセプトを決め切る。残り95分でMVPを動かす。最後40分は映像・音・プレゼン台本。提出は最後の30分で必ず始める。</p>
+
+</section>
+
+<!-- ===== 4. 参考データ ===== -->
+<section>
+<h2 class="h1">■ 参考データ</h2>
+
+<h3 class="h2">▶ 全日本AI 2025 決勝・出場10チーム全部</h3>
+<p style="font-size:13px;color:#555;">テーマは「井／＃／マス目」。優勝はオープニング映像・3Dスキャン付きの世界観派。8位以下も全部「テーマ一語の解釈勝負」。</p>
+<div class="past-list">
+  <div class="past-item">
+    <span class="badge">優勝</span>
+    <div class="name">ASI DIVE</div>
+    <div class="team">たい焼きテクノロジーズ</div>
+    <div class="why">人類が井戸からASIを破壊するゲーム。3Dスキャン＋Cursor＋Sora 2＋Suno、コード5000行超、オープニング・エンディング映像付き。<br>📄 <a href="https://forest.watch.impress.co.jp/docs/special/2067831.html">窓の杜レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge s">次点</span>
+    <div class="name">ピコッと量子ひらめきパズル</div>
+    <div class="team">クロスジェネレーション</div>
+    <div class="why">人間 vs 量子コンピュータのナンプレ。量子アニーリングをクラウド経由で使用、HTML/画像は生成AI。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">カワズ★オンリーワン</div>
+    <div class="team">囲碁将棋部</div>
+    <div class="why">所属・実績を入れると「世界で唯一の人間」として褒めてくれるアプリ。「井」→「井の中の蛙」の解釈。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">井戸ディフェンス</div>
+    <div class="team">0次会</div>
+    <div class="why">井戸に入る不要物を撃ち落とすゲーム。AI生成ドット絵キャラ＋ライブチャット風メッセージ。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">漢字画数ゲーム</div>
+    <div class="team">かもみ</div>
+    <div class="why">3×3マスに漢字を並べ画数合計を9にする子ども向けゲーム。手書きOCR＋マルチAIエージェント。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">コメントアウト管理ゲーム</div>
+    <div class="team">タコスなちょす</div>
+    <div class="why">「＃」→Pythonコメントアウトと解釈。仕事をコメントアウトしてワークライフバランス管理。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">ねこアボカドV「励ましAI」</div>
+    <div class="team">ねこアボカドV</div>
+    <div class="why">悩みを井戸に落とすとAIが感情を汲んで励ます。月/太陽切替でトーン変更。トリプルミーニング解釈。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">コード解説アプリ</div>
+    <div class="team">さんかくすう</div>
+    <div class="why">AI生成ゲームを「どの部分がどのコードか」初心者向けに解説。ハッカソン体験を非参加者と繋ぐ意図。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">スマイルグリッド</div>
+    <div class="team">わいわいハッカソンズ</div>
+    <div class="why">笑顔をAIがキャラ化し3×3図鑑作成。プレゼン後にかぶり物で寸劇まで実施。ローカル笑顔認識でプライバシー配慮。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">出場</span>
+    <div class="name">中小企業経営診断アプリ</div>
+    <div class="team">診断AI's</div>
+    <div class="why">経営者とAIが音声対話して機会を発見させるアプリ。<b style="color:#C0392B;">時間切れで未完成→審査外</b>。</div>
+  </div>
+</div>
+
+<h3 class="h2">▶ 全日本AI 2025 地方優勝</h3>
+<div class="past-list">
+  <div class="past-item">
+    <span class="badge r">東日本一般</span>
+    <div class="name">マブダチラップバトル</div>
+    <div class="team">囲碁将棋部</div>
+    <div class="why">SNS拡散・バズるシーンまで想定した設計が評価。「占」「閃」テーマ。<br>📄 <a href="https://www.aifestival.jp/news/2025east-result">大会レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">西日本一般</span>
+    <div class="name">命懸けのASI暴走停止</div>
+    <div class="team">たい焼きテクノロジーズ</div>
+    <div class="why">決勝優勝チームの原型。「命」テーマからシューティング。<br>📄 <a href="https://www.aifestival.jp/news/2025west-result">大会レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">中日本一般</span>
+    <div class="name">What's this?</div>
+    <div class="team">かもみ</div>
+    <div class="why">「光」を多シーンに反映したクイズゲーム。総合的な完成度が勝因。<br>📄 <a href="https://www.aifestival.jp/news/2025center-result">大会レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">九州一般</span>
+    <div class="name">陰謀論説得ゲーム</div>
+    <div class="team">タコスなちょす</div>
+    <div class="why">プレイヤーが陰謀論者を説得するゲーム。現代の課題を取り入れた点が評価。難易度高い。<br>📄 <a href="https://www.aifestival.jp/news/2025kyusyu-result">大会レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">北海道一般</span>
+    <div class="name">息子よ、○○と言ってくれ！</div>
+    <div class="team">0次会</div>
+    <div class="why">子供が初めて話す言葉に着想。「お化け」テーマ。<br>📄 <a href="https://www.aifestival.jp/news/2025hokkaido-result">大会レポート</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">東日本ビギナー</span>
+    <div class="name">ひとり禅問答</div>
+    <div class="team">笠置晶</div>
+    <div class="why">「禅」をAIとの対話に置き換え。AIが答える行為の先の体験を提案。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">中日本ビギナー</span>
+    <div class="name">弁解アプリ</div>
+    <div class="team">神珠恵</div>
+    <div class="why">「解」テーマから「弁解」。45分制作で動くものを出した点が評価。</div>
+  </div>
+  <div class="past-item">
+    <span class="badge r">九州ビギナー</span>
+    <div class="name">音楽と知識のシンクロ</div>
+    <div class="team">YY</div>
+    <div class="why">音楽と知識を組み合わせたタイピングゲーム。</div>
+  </div>
+</div>
+<p style="font-size:13px;color:#555;">共通点は3つだけ。①テーマ一語を意外な方向にひねる。②動くデモが時間内に出る（時間切れチームは審査外）。③SNSや日常で語れる一行が添えてある。</p>
+
+<h3 class="h2">▶ Web Speed Hackathon 歴代テーマと優勝者</h3>
+<div class="past-list">
+  <div class="past-item">
+    <span class="badge">2025</span>
+    <div class="name">AREMA（動画配信）</div>
+    <div class="team">@shun_shobon 477.16点</div>
+    <div class="why">JSバンドルを161MB→964KB（100倍圧縮）。FFmpeg/Luxon/Zod削除、Webpack→Vite、AVIF化。上位17人で唯一規約に通って繰り上げ優勝。<br>📄 <a href="https://zenn.dev/shun_shobon/articles/173450f5bec890">参加記</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge">2024</span>
+    <div class="name">Cyber TOON（漫画）</div>
+    <div class="team">@cp20 542.85点</div>
+    <div class="why">初出場優勝（東工大traP）。jQuery/moment/lodash/MUI削除、AVIF化、SSR完全対応、ReDoS脆弱性も発見。<br>📄 <a href="https://trap.jp/post/2170/">参加記</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge">2022</span>
+    <div class="name">CyberTicket（ベッティング）</div>
+    <div class="team">@yusukebe / @NaotoshiFujita 500点満点同点1位</div>
+    <div class="why">満点同点1位。yusukebeはHonoフレームワーク作者、世界レベルの参加者層。<br>📄 <a href="https://github.com/CyberAgentHack/web-speed-hackathon-2022-leaderboard">2022リーダーボード</a></div>
+  </div>
+  <div class="past-item">
+    <span class="badge">2021</span>
+    <div class="name">CAwitter（SNS）</div>
+    <div class="team">@NaotoshiFujita 719.92点</div>
+    <div class="why">2位@sapphi-redと0.01点差。1位の常連。<br>📄 <a href="https://github.com/CyberAgentHack/web-speed-hackathon-2021-leaderboard">2021リーダーボード</a></div>
+  </div>
+</div>
+<p style="font-size:13px;color:#555;">注目すべきは「上位がほぼ毎回規約違反で繰り上がる」点。2025は上位17人で1人だけ通過、2024もトップ4人が落ちて5位→1位に。スコアだけ取っても通らない。普段から規約読み込みに慣れているフロントエンドのプロ向け競技。<br>📄 <a href="https://speakerdeck.com/shuta13/li-dai-noweb-speed-hackathonnochu-ti-karakao-erudeguresinaipahuomansugai-shan">歴代テーマ分析（Speaker Deck）</a></p>
+
+<h3 class="h2">▶ Impact Tokyo Hackathon の中身</h3>
+<p style="font-size:13px;">テーマは「人類に仕えるAI」。賞金はAmazonギフト1.5万円＋クラウドクレジット$300と薄い。狙うなら賞金より「国際チームと組む」「自分のサービスを磨く」目的に絞る。<a href="https://academy.manus.im/events/019cb813-f221-725c-8e2c-056a9cda1dc7">公式ページ</a>に過去回の優勝者一覧は記載なし。</p>
+
+</section>
+
+<div class="sources">
+出典：
+<a href="https://forest.watch.impress.co.jp/docs/special/2067831.html">窓の杜：全日本AIハッカソン2025決勝レポート</a> ／
+<a href="https://www.aifestival.jp/hackathon">AIフェスティバル公式：2026予選日程</a> ／
+<a href="https://www.aifestival.jp/news/2025east-result">東日本</a>
+<a href="https://www.aifestival.jp/news/2025center-result">中日本</a>
+<a href="https://www.aifestival.jp/news/2025west-result">西日本</a> ／
+<a href="https://trap.jp/post/2864/">traP：Web Speed Hackathon 2026 参加記</a> ／
+<a href="https://github.com/CyberAgentHack/web-speed-hackathon-2025">Web Speed 2025 GitHub</a> ／
+<a href="https://academy.manus.im/events/019cb813-f221-725c-8e2c-056a9cda1dc7">Manus Academy：Impact Tokyo 2026</a>
+</div>
+
+</div>
+</body>
+</html>
